@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arya OS | Ultimate Pro Simulator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <audio id="startupSound" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" preload="auto"></audio>
+
+    <div id="bootScreen" class="system-layer boot-layer">
+        <div class="boot-wrapper">
+            <div class="eye-ring-container">
+                <div class="main-eye">🧿</div>
+                <div class="spinning-orbital"></div>
+                <div class="glow-pulse"></div>
+            </div>
+            <div class="boot-info">
+                <span class="kernel-text">ARYA_CORE_OS_INIT</span>
+                <div class="load-bar-container">
+                    <div id="loadFill"></div>
+                </div>
+                <span id="bootPercent">0%</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="loginScreen" class="system-layer login-layer hidden">
+        <div class="login-backdrop"></div>
+        <div class="glass-auth-card">
+            <div class="auth-user">
+                <div class="user-pic">🧿</div>
+                <h1>Arya Administrator</h1>
+                <p>PROTECTED SECURE ENVIRONMENT</p>
+            </div>
+            <div class="auth-input-group">
+                <input type="password" id="passInput" placeholder="Enter PIN" autofocus>
+                <button onclick="Arya.verifyLogin()">DECRYPT</button>
+            </div>
+            <div class="auth-footer">PIN: 1234</div>
+        </div>
+    </div>
+
+    <div id="desktop" class="system-layer desktop-layer hidden">
+        
+        <div class="top-bar">
+            <div class="top-left" onclick="toggleStart()">ARYA OS</div>
+            <div class="top-center">
+                <div id="systemClock">00:00:00</div>
+                <div id="systemDate" class="full-date">Calculating...</div>
+            </div>
+            <div class="top-right">
+                <span id="chargeIcon"></span>
+                <span id="batPercentage">--%</span>
+                <div class="battery-outer">
+                    <div id="batteryInner"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="windowWrite" class="app-window hidden" style="width: 950px; height: 700px;">
+            <div class="win-title-bar" onmousedown="Arya.drag(event, 'windowWrite')">
+                <div class="win-btns"><div class="btn-close" onclick="closeApp('windowWrite')"></div></div>
+                <div class="win-name">ARYA WORD - SPECIFICATION.DOCX</div>
+            </div>
+            <div class="win-toolbar">File · Edit · Insert · Layout · Format · References</div>
+            <div class="win-main-area paper-view">
+                <div class="a4-page" contenteditable="true">Start writing with Arya Word processor...</div>
+            </div>
+        </div>
+
+        <div id="windowGrid" class="app-window hidden" style="width: 1000px; height: 650px;">
+            <div class="win-title-bar" onmousedown="Arya.drag(event, 'windowGrid')">
+                <div class="win-btns"><div class="btn-close" onclick="closeApp('windowGrid')"></div></div>
+                <div class="win-name">ARYA EXCEL - METRICS.XLSX</div>
+            </div>
+            <div class="win-toolbar">File · Data · Formulas · Table · Pivot · Security</div>
+            <div class="win-main-area grid-view">
+                <table id="excelGrid"></table>
+            </div>
+        </div>
+
+        <div id="windowPaint" class="app-window hidden" style="width: 950px; height: 680px;">
+            <div class="win-title-bar" onmousedown="Arya.drag(event, 'windowPaint')">
+                <div class="win-btns"><div class="btn-close" onclick="closeApp('windowPaint')"></div></div>
+                <div class="win-name">ARYA PAINT - DIGITAL ENGINE</div>
+            </div>
+            <div class="paint-controls">
+                <div class="tool-item">Brush Color: <input type="color" id="brushColor" value="#2979ff"></div>
+                <div class="tool-item">Size: <input type="range" id="brushSize" min="1" max="100" value="8"></div>
+                <button class="clear-btn" onclick="Arya.clearCanvas()">WIPE CANVAS</button>
+            </div>
+            <div class="win-main-area canvas-view">
+                <canvas id="paintCanvas"></canvas>
+            </div>
+        </div>
+
+        <div id="windowPPT" class="app-window hidden" style="width: 1000px; height: 680px;">
+            <div class="win-title-bar" onmousedown="Arya.drag(event, 'windowPPT')">
+                <div class="win-btns"><div class="btn-close" onclick="closeApp('windowPPT')"></div></div>
+                <div class="win-name">ARYA POWERPOINT - PRESENTATION.PPTX</div>
+            </div>
+            <div class="win-toolbar">Design · Animations · Slide Show · Transitions</div>
+            <div class="win-main-area ppt-workspace">
+                <div class="ppt-sidebar">
+                    <button onclick="Arya.addPPTSlide()">+ Add Slide</button>
+                    <div id="pptThumbnails"></div>
+                </div>
+                <div class="ppt-canvas">
+                    <div id="currentSlide" class="slide-body">
+                        <h1 contenteditable="true">Click to add title</h1>
+                        <p contenteditable="true">Click to add subtitle</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="windowNote" class="app-window hidden" style="width: 600px; height: 450px;">
+            <div class="win-title-bar" onmousedown="Arya.drag(event, 'windowNote')">
+                <div class="win-btns"><div class="btn-close" onclick="closeApp('windowNote')"></div></div>
+                <div class="win-name">NOTEPAD - SCRATCHPAD.TXT</div>
+            </div>
+            <div class="win-toolbar">File · Edit · Format · View</div>
+            <div class="win-main-area text-view">
+                <textarea id="notepadArea" placeholder="Raw buffer stream logs..."></textarea>
+            </div>
+        </div>
+
+        <div id="windowFiles" class="app-window hidden" style="width: 850px; height: 550px;">
+            <div class="win-title-bar" onmousedown="Arya.drag(event, 'windowFiles')">
+                <div class="win-btns"><div class="btn-close" onclick="closeApp('windowFiles')"></div></div>
+                <div class="win-name">FILE EXPLORER - STORAGE DEVS</div>
+            </div>
+            <div class="win-toolbar">Root System / Core / Media / Users</div>
+            <div class="win-main-area explorer-layout">
+                <div class="explorer-sidebar">
+                    <div class="side-item active" onclick="Arya.loadDir('Root')">💽 System (C:)</div>
+                    <div class="side-item" onclick="Arya.loadDir('Documents')">📁 Documents</div>
+                    <div class="side-item" onclick="Arya.loadDir('Media')">🖼️ Media Files</div>
+                </div>
+                <div class="explorer-content" id="explorerContent"></div>
+            </div>
+        </div>
+
+        <div id="windowBrowser" class="app-window hidden" style="width: 1000px; height: 700px;">
+            <div class="win-title-bar" onmousedown="Arya.drag(event, 'windowBrowser')">
+                <div class="win-btns"><div class="btn-close" onclick="closeApp('windowBrowser')"></div></div>
+                <div class="win-name">ARYA QUANTUM BROWSER</div>
+            </div>
+            <div class="browser-address-bar">
+                <button onclick="Arya.navBrowser('home')">🏠</button>
+                <input type="text" id="browserUrl" value="https://arya.net">
+                <button onclick="Arya.navBrowser('go')">GO</button>
+            </div>
+            <div class="win-main-area browser-frame-sim" id="browserFrame">
+                <div class="web-portal">
+                    <h1>Welcome to the Arya Sandbox Web</h1>
+                    <p>Simulated modern hyper-secure proxy web layout engine active.</p>
+                    <div class="web-bookmarks">
+                        <button onclick="document.getElementById('browserUrl').value='https://news.ycombinator.com'; Arya.navBrowser('go')">Hacker News</button>
+                        <button onclick="document.getElementById('browserUrl').value='https://wikipedia.org'; Arya.navBrowser('go')">Wikipedia</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="startMenu" class="start-overlay">
+            <div class="start-header">🧿 ARYA CORE INTERACTION LABS</div>
+            <div class="start-search-box">
+                <input type="text" placeholder="Search operational indices, manifests, utilities...">
+            </div>
+            <div class="start-apps-headline">All Operational Modules</div>
+            <div class="start-apps">
+                <div class="app-tile" onclick="openApp('windowWrite')">📄<span>Arya Word</span></div>
+                <div class="app-tile" onclick="openApp('windowGrid')">📊<span>Arya Excel</span></div>
+                <div class="app-tile" onclick="openApp('windowPaint')">🎨<span>Paint Studio</span></div>
+                <div class="app-tile" onclick="openApp('windowPPT')">📉<span>PowerPoint</span></div>
+                <div class="app-tile" onclick="openApp('windowNote')">📝<span>Notepad</span></div>
+                <div class="app-tile" onclick="openApp('windowBrowser')">🌐<span>Quantum Web</span></div>
+                <div class="app-tile" onclick="openApp('windowFiles')">🗂️<span>File Explorer</span></div>
+                <div class="app-tile settings-dim">⚙️<span>Settings</span></div>
+                <div class="app-tile settings-dim">🖥️<span>Terminal</span></div>
+                <div class="app-tile settings-dim">🛍️<span>App Store</span></div>
+                <div class="app-tile settings-dim">🎵<span>Media Player</span></div>
+                <div class="app-tile settings-dim">🧮<span>Calculator</span></div>
+            </div>
+        </div>
+
+        <div class="dock-container">
+            <div class="dock-bar">
+                <div class="dock-btn start-trigger" onclick="toggleStart()">🧿</div>
+                <div class="dock-divider"></div>
+                
+                <div class="dock-search-wrap">
+                    <input type="text" id="dockSearch" placeholder="🔍 Search Arya OS..." onkeyup="Arya.handleDockSearch(event)">
+                </div>
+                
+                <div class="dock-divider"></div>
+                <div class="dock-btn" title="Quantum Web Browser" onclick="openApp('windowBrowser')">🌐</div>
+                <div class="dock-btn" title="File System" onclick="openApp('windowFiles')">🗂️</div>
+                <div class="dock-divider"></div>
+                <div class="dock-btn" title="Word Processor" onclick="openApp('windowWrite')">📄</div>
+                <div class="dock-btn" title="Spreadsheet Analytics" onclick="openApp('windowGrid')">📊</div>
+                <div class="dock-btn" title="Slide Engine" onclick="openApp('windowPPT')">📉</div>
+                <div class="dock-btn" title="Paint Canvas" onclick="openApp('windowPaint')">🎨</div>
+                <div class="dock-btn" title="Notepad Buffer" onclick="openApp('windowNote')">📝</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

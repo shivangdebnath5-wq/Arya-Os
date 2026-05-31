@@ -1,0 +1,172 @@
+:root { 
+    --wall: url('https://i.ibb.co/Z6HS6qGn/24ca2d9a51d1a44d3eb5fc6b4dc69657.jpg');
+    --glass-bg: rgba(255, 255, 255, 0.08);
+    --glass-border: rgba(255, 255, 255, 0.16);
+    --active-tint: rgba(255, 255, 255, 0.12);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; cursor: default; user-select: none; }
+body, html { width: 100vw; height: 100vh; overflow: hidden; background: #000; }
+
+.system-layer { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 10; }
+.hidden { display: none !important; }
+
+/* ORBITAL LOADING SEQUENCE */
+.boot-layer { background: #000; display: flex; align-items: center; justify-content: center; z-index: 99999; }
+.boot-wrapper { text-align: center; }
+.eye-ring-container { position: relative; width: 220px; height: 220px; margin: 0 auto; display: flex; align-items: center; justify-content: center; }
+.main-eye { font-size: 110px; z-index: 5; filter: drop-shadow(0 0 30px rgba(255,255,255,0.25)); }
+.spinning-orbital { 
+    position: absolute; width: 180px; height: 180px; 
+    border: 3px solid transparent; border-top: 3px solid #ffffff; border-radius: 50%;
+    animation: spin 0.8s linear infinite; filter: drop-shadow(0 0 8px #fff);
+}
+.glow-pulse { 
+    position: absolute; width: 150px; height: 150px; background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 75%);
+    animation: pulse 1.5s ease-in-out infinite;
+}
+.boot-info { margin-top: 35px; }
+.kernel-text { display: block; font-size: 11px; letter-spacing: 6px; opacity: 0.4; font-weight: 900; }
+.load-bar-container { width: 220px; height: 3px; background: rgba(255,255,255,0.08); margin: 15px auto; overflow: hidden; border-radius: 10px; }
+#loadFill { height: 100%; width: 0%; background: #ffffff; }
+#bootPercent { font-size: 14px; font-weight: 300; opacity: 0.7; }
+
+/* AUTHENTICATION ENVIRONMENT */
+.login-layer { display: flex; align-items: center; justify-content: center; z-index: 88888; }
+.login-backdrop { position: absolute; inset: 0; background: var(--wall) center/cover; filter: blur(60px) brightness(0.4); transform: scale(1.05); }
+.glass-auth-card { 
+    position: relative; z-index: 2; width: 500px; padding: 75px 50px; 
+    background: var(--glass-bg); backdrop-filter: blur(40px); border: 1px solid var(--glass-border);
+    border-radius: 45px; text-align: center; box-shadow: 0 50px 120px rgba(0,0,0,0.6);
+}
+.user-pic { font-size: 80px; margin-bottom: 20px; filter: drop-shadow(0 0 20px rgba(255,255,255,0.4)); }
+.glass-auth-card h1 { font-weight: 300; font-size: 36px; letter-spacing: -1px; margin-bottom: 8px; color: #fff; }
+.glass-auth-card p { font-size: 10px; letter-spacing: 4px; opacity: 0.4; margin-bottom: 45px; font-weight: 800; }
+.auth-input-group { background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 100px; display: flex; overflow: hidden; padding: 2px; }
+.auth-input-group input { background: transparent; border: none; flex: 1; padding: 20px; color: #fff; outline: none; text-align: center; font-size: 22px; letter-spacing: 6px; }
+.auth-input-group button { background: #ffffff; color: #000000; border: none; padding: 0 40px; font-weight: 900; cursor: pointer; transition: background 0.3s; }
+.auth-input-group button:hover { background: #e0e0e0; }
+.auth-footer { margin-top: 25px; font-size: 11px; opacity: 0.2; letter-spacing: 1px; }
+
+/* DESKTOP MATRIX */
+.desktop-layer { background: var(--wall) center/cover; z-index: 1; }
+.top-bar { 
+    height: 50px; background: rgba(0,0,0,0.35); backdrop-filter: blur(25px); 
+    display: flex; justify-content: space-between; align-items: center; padding: 0 30px;
+    border-bottom: 1px solid var(--glass-border); position: relative; z-index: 10000;
+}
+.top-left { font-weight: 900; letter-spacing: 2px; font-size: 14px; cursor: pointer; text-shadow: 0 2px 5px rgba(0,0,0,0.5); }
+.top-center { text-align: center; }
+#systemClock { font-size: 15px; font-weight: 700; letter-spacing: 0.5px; }
+.full-date { font-size: 10px; opacity: 0.5; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-top: 1px; }
+
+/* BATTERY MATRIX INDICATOR */
+.top-right { display: flex; align-items: center; gap: 10px; }
+#batPercentage { font-size: 13px; font-weight: 600; }
+.battery-outer { width: 34px; height: 16px; border: 1.5px solid rgba(255,255,255,0.5); padding: 1.5px; border-radius: 4px; position: relative; }
+.battery-outer::after { content: ''; position: absolute; right: -5px; top: 4px; width: 3px; height: 5px; background: rgba(255,255,255,0.5); border-radius: 0 1px 1px 0; }
+#batteryInner { height: 100%; width: 0%; border-radius: 1px; transition: width 1s, background-color 0.4s; }
+
+/* MODULAR WINDOW SPECIFICATIONS */
+.app-window { position: absolute; background: #0b0b0d; border: 1px solid var(--glass-border); border-radius: 16px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 40px 100px rgba(0,0,0,0.75); min-width: 300px; min-height: 200px; }
+.win-title-bar { background: #141417; padding: 14px 20px; display: flex; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.win-btns { display: flex; align-items: center; }
+.btn-close { width: 13px; height: 13px; background: #ff5f56; border-radius: 50%; cursor: pointer; border: 1px solid rgba(0,0,0,0.1); }
+.btn-close:hover { background: #ff3b30; }
+.win-name { flex: 1; text-align: center; font-size: 10px; letter-spacing: 3px; font-weight: 800; color: #88888b; text-transform: uppercase; }
+.win-toolbar { background: #1a1a1f; padding: 9px 20px; font-size: 11.5px; color: #6e6e73; border-bottom: 1px solid var(--glass-border); word-spacing: 12px; }
+.win-main-area { flex: 1; overflow: auto; background: #000; position: relative; }
+
+/* ARYA WORD APP */
+.paper-view { background: #16161a; padding: 35px; }
+.a4-page { background: #ffffff; color: #000000; width: 100%; max-width: 800px; min-height: 1050px; margin: 0 auto; padding: 75px; box-shadow: 0 15px 45px rgba(0,0,0,0.4); outline: none; cursor: text; font-size: 16px; user-select: text; }
+
+/* ARYA EXCEL APP */
+.grid-view { background: #000; }
+#excelGrid { width: 100%; border-collapse: collapse; }
+#excelGrid td { border: 1px solid #1c1c1e; min-width: 105px; height: 35px; color: #e5e5ea; padding: 6px; outline: none; cursor: cell; user-select: text; font-size: 13px; }
+#excelGrid td:focus { background: rgba(255,255,255,0.08); border: 1px solid #0a84ff; }
+
+/* CANVAS DIGITAL STUDIO */
+.paint-controls { background: #16161a; border-bottom: 1px solid var(--glass-border); padding: 12px 20px; display: flex; gap: 25px; align-items: center; }
+.tool-item { font-size: 12px; display: flex; align-items: center; gap: 10px; color: #aeaeae; }
+.tool-item input[type="color"] { background: none; border: none; width: 30px; height: 30px; cursor: pointer; }
+.clear-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: #fff; padding: 6px 15px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; }
+.clear-btn:hover { background: #fff; color: #000; }
+#paintCanvas { background: #ffffff; display: block; }
+
+/* ARYA POWERPOINT APP */
+.ppt-workspace { display: flex; height: 100%; background: #1c1c1e; }
+.ppt-sidebar { width: 180px; background: #141416; border-right: 1px solid var(--glass-border); padding: 15px; display: flex; flex-direction: column; gap: 15px; }
+.ppt-sidebar button { background: #0a84ff; color: #fff; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; }
+#pptThumbnails { display: flex; flex-direction: column; gap: 10px; overflow-y: auto; }
+.ppt-thumb { background: #2c2c2e; border: 2px solid transparent; height: 80px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 11px; cursor: pointer; color: #8e8e93; }
+.ppt-thumb.active { border-color: #0a84ff; color: #fff; }
+.ppt-canvas { flex: 1; padding: 40px; display: flex; align-items: center; justify-content: center; }
+.slide-body { background: #fff; width: 100%; max-width: 700px; aspect-ratio: 16/9; box-shadow: 0 20px 50px rgba(0,0,0,0.5); padding: 50px; color: #000; display: flex; flex-direction: column; justify-content: center; text-align: center; outline: none; }
+.slide-body h1 { font-size: 36px; margin-bottom: 15px; user-select: text; cursor: text; }
+.slide-body p { font-size: 16px; color: #48484a; user-select: text; cursor: text; }
+
+/* NOTEPAD APP */
+.text-view textarea { width: 100%; height: 100%; background: #000; border: none; resize: none; outline: none; padding: 20px; color: #32d74b; font-family: 'Consolas', monospace; font-size: 15px; user-select: text; cursor: text; }
+
+/* EXPLORER ARCHITECTURE */
+.explorer-layout { display: flex; height: 100%; }
+.explorer-sidebar { width: 200px; background: #141416; border-right: 1px solid var(--glass-border); padding: 15px 10px; }
+.side-item { padding: 10px 15px; border-radius: 8px; font-size: 13px; color: #aeaeae; margin-bottom: 5px; cursor: pointer; }
+.side-item.active, .side-item:hover { background: var(--active-tint); color: #fff; }
+.explorer-content { flex: 1; padding: 25px; display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 20px; align-content: start; background: #08080a; }
+.file-node { text-align: center; cursor: pointer; padding: 10px; border-radius: 10px; transition: background 0.2s; }
+.file-node:hover { background: rgba(255,255,255,0.05); }
+.file-icon { font-size: 36px; margin-bottom: 6px; display: block; }
+.file-name { font-size: 11px; color: #e5e5ea; display: block; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
+
+/* QUANTUM WEB EXPLORER FRAME */
+.browser-address-bar { background: #1c1c1e; padding: 10px 20px; display: flex; gap: 15px; align-items: center; border-bottom: 1px solid var(--glass-border); }
+.browser-address-bar input { background: #000; border: 1px solid var(--glass-border); border-radius: 8px; flex: 1; padding: 8px 15px; color: #3aaeff; font-size: 13px; outline: none; user-select: text; cursor: text; }
+.browser-address-bar button { background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: #fff; padding: 7px 15px; border-radius: 6px; cursor: pointer; }
+.browser-frame-sim { background: #fff; color: #000; padding: 50px; overflow-y: auto; }
+.web-portal { max-width: 600px; margin: 0 auto; text-align: center; }
+.web-portal h1 { font-size: 28px; margin-bottom: 15px; }
+.web-portal p { color: #666; font-size: 14px; margin-bottom: 30px; }
+.web-bookmarks { display: flex; gap: 15px; justify-content: center; }
+.web-bookmarks button { padding: 10px 20px; border-radius: 8px; border: 1px solid #ddd; background: #f9f9f9; cursor: pointer; font-weight: 600; }
+.web-bookmarks button:hover { background: #eee; }
+
+/* INTERACTIVE PREMIUM SYSTEM DOCK */
+.dock-container { position: absolute; bottom: 30px; width: 100%; display: flex; justify-content: center; z-index: 9999; }
+.dock-bar { 
+    background: rgba(10,10,12,0.6); backdrop-filter: blur(35px) saturate(1.5); border: 1px solid var(--glass-border); 
+    padding: 12px 30px; border-radius: 32px; display: flex; gap: 20px; align-items: center;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+}
+.dock-btn { font-size: 44px; cursor: pointer; transition: 0.25s cubic-bezier(0.1, 0.9, 0.25, 1.25); filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4)); }
+.dock-btn:hover { transform: translateY(-15px) scale(1.25); }
+.dock-divider { width: 1px; height: 42px; background: rgba(255,255,255,0.15); }
+
+/* INTEGRATED DOCK SEARCH SYSTEM */
+.dock-search-wrap { width: 200px; transition: width 0.3s; }
+.dock-search-wrap input { width: 100%; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 8px 16px; color: #fff; font-size: 13px; outline: none; user-select: text; cursor: text; }
+.dock-search-wrap input:focus { border-color: #0a84ff; background: rgba(0,0,0,0.5); }
+
+/* ARYA MULTI-SYSTEM APPS WINDOW OVERLAY */
+.start-overlay { 
+    position: absolute; bottom: 105px; left: 50%; transform: translateX(-50%) translateY(40px);
+    width: 620px; height: 580px; background: rgba(10,10,14,0.94); backdrop-filter: blur(40px);
+    border: 1px solid var(--glass-border); border-radius: 32px; padding: 40px;
+    opacity: 0; pointer-events: none; transition: 0.35s cubic-bezier(0.1, 0.9, 0.2, 1); z-index: 9995;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.8);
+}
+.start-overlay.active { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: all; }
+.start-header { font-size: 15px; font-weight: 800; color: #fff; letter-spacing: 1px; margin-bottom: 20px; }
+.start-search-box input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 12px; padding: 12px 20px; color: #fff; font-size: 14px; outline: none; margin-bottom: 30px; user-select: text; cursor: text; }
+.start-apps-headline { font-size: 11px; font-weight: 800; color: #6e6e73; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 15px; }
+.start-apps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; overflow-y: auto; height: 340px; padding-right: 5px; }
+.app-tile { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); padding: 20px 10px; border-radius: 16px; text-align: center; cursor: pointer; transition: background 0.2s, transform 0.2s; }
+.app-tile:hover { background: var(--active-tint); transform: translateY(-2px); }
+.app-tile span { display: block; font-size: 12px; margin-top: 8px; color: #d1d1d6; }
+.settings-dim { opacity: 0.55; }
+.settings-dim:hover { background: none; transform: none; cursor: not-allowed; }
+
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.7; } }
