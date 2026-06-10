@@ -8,7 +8,9 @@
 </head>
 <body>
     <audio id="startupSound" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" preload="auto"></audio>
+    <audio id="alarmSound" src="https://assets.mixkit.co/active_storage/sfx/911/911-preview.mp3" preload="auto" loop></audio>
 
+    <!-- BOOT INITIALIZATION -->
     <div id="bootScreen" class="system-layer boot-layer">
         <div class="boot-wrapper">
             <div class="eye-ring-container">
@@ -26,6 +28,7 @@
         </div>
     </div>
 
+    <!-- GLASSMORPHIC SECURITY CARD -->
     <div id="loginScreen" class="system-layer login-layer hidden">
         <div class="login-backdrop"></div>
         <div class="glass-auth-card">
@@ -36,14 +39,16 @@
             </div>
             <div class="auth-input-group">
                 <input type="password" id="passInput" placeholder="Enter PIN" autofocus>
-                <button onclick="Arya.verifyLogin()">Login</button>
+                <button onclick="Arya.verifyLogin()">DECRYPT</button>
             </div>
             <div class="auth-footer">PIN: 1234</div>
         </div>
     </div>
 
+    <!-- MAIN OPERATING ENVIRONMENT -->
     <div id="desktop" class="system-layer desktop-layer hidden">
         
+        <!-- SYSTEM TASKBAR -->
         <div class="top-bar">
             <div class="top-left" onclick="toggleStart()">ARYA OS</div>
             <div class="top-center">
@@ -59,35 +64,47 @@
             </div>
         </div>
 
-        <div id="windowWrite" class="app-window hidden" style="width: 950px; height: 700px;">
+        <!-- APP: ARYA WORD -->
+        <div id="windowWrite" class="app-window hidden" style="width: 850px; height: 600px; left: 100px; top: 80px;">
             <div class="win-title-bar" onmousedown="Arya.drag(event, 'windowWrite')">
-                <div class="win-btns"><div class="btn-close" onclick="closeApp('windowWrite')"></div></div>
+                <div class="win-btns">
+                    <div class="btn-close" onclick="closeApp('windowWrite')"></div>
+                    <div class="btn-minimize" onclick="minimizeApp('windowWrite')"></div>
+                </div>
                 <div class="win-name">ARYA WORD - SPECIFICATION.DOCX</div>
             </div>
-            <div class="win-toolbar">File · Edit · Insert · Layout · Format · References</div>
+            <div class="win-toolbar">File · Edit · Insert · Layout</div>
             <div class="win-main-area paper-view">
                 <div class="a4-page" contenteditable="true">Start writing with Arya Word processor...</div>
             </div>
         </div>
 
-        <div id="windowGrid" class="app-window hidden" style="width: 1000px; height: 650px;">
+        <!-- APP: ARYA EXCEL -->
+        <div id="windowGrid" class="app-window hidden" style="width: 900px; height: 550px; left: 120px; top: 100px;">
             <div class="win-title-bar" onmousedown="Arya.drag(event, 'windowGrid')">
-                <div class="win-btns"><div class="btn-close" onclick="closeApp('windowGrid')"></div></div>
+                <div class="win-btns">
+                    <div class="btn-close" onclick="closeApp('windowGrid')"></div>
+                    <div class="btn-minimize" onclick="minimizeApp('windowGrid')"></div>
+                </div>
                 <div class="win-name">ARYA EXCEL - METRICS.XLSX</div>
             </div>
-            <div class="win-toolbar">File · Data · Formulas · Table · Pivot · Security</div>
+            <div class="win-toolbar">File · Data · Formulas · Table</div>
             <div class="win-main-area grid-view">
                 <table id="excelGrid"></table>
             </div>
         </div>
 
-        <div id="windowPaint" class="app-window hidden" style="width: 950px; height: 680px;">
+        <!-- APP: ARYA PAINT -->
+        <div id="windowPaint" class="app-window hidden" style="width: 800px; height: 550px; left: 140px; top: 120px;">
             <div class="win-title-bar" onmousedown="Arya.drag(event, 'windowPaint')">
-                <div class="win-btns"><div class="btn-close" onclick="closeApp('windowPaint')"></div></div>
+                <div class="win-btns">
+                    <div class="btn-close" onclick="closeApp('windowPaint')"></div>
+                    <div class="btn-minimize" onclick="minimizeApp('windowPaint')"></div>
+                </div>
                 <div class="win-name">ARYA PAINT - DIGITAL ENGINE</div>
             </div>
             <div class="paint-controls">
-                <div class="tool-item">Brush Color: <input type="color" id="brushColor" value="#2979ff"></div>
+                <div class="tool-item">Brush: <input type="color" id="brushColor" value="#2979ff"></div>
                 <div class="tool-item">Size: <input type="range" id="brushSize" min="1" max="100" value="8"></div>
                 <button class="clear-btn" onclick="Arya.clearCanvas()">WIPE CANVAS</button>
             </div>
@@ -96,12 +113,16 @@
             </div>
         </div>
 
-        <div id="windowPPT" class="app-window hidden" style="width: 1000px; height: 680px;">
+        <!-- APP: ARYA POWERPOINT -->
+        <div id="windowPPT" class="app-window hidden" style="width: 900px; height: 550px; left: 160px; top: 140px;">
             <div class="win-title-bar" onmousedown="Arya.drag(event, 'windowPPT')">
-                <div class="win-btns"><div class="btn-close" onclick="closeApp('windowPPT')"></div></div>
+                <div class="win-btns">
+                    <div class="btn-close" onclick="closeApp('windowPPT')"></div>
+                    <div class="btn-minimize" onclick="minimizeApp('windowPPT')"></div>
+                </div>
                 <div class="win-name">ARYA POWERPOINT - PRESENTATION.PPTX</div>
             </div>
-            <div class="win-toolbar">Design · Animations · Slide Show · Transitions</div>
+            <div class="win-toolbar">Design · Animations · Slide Show</div>
             <div class="win-main-area ppt-workspace">
                 <div class="ppt-sidebar">
                     <button onclick="Arya.addPPTSlide()">+ Add Slide</button>
@@ -116,26 +137,32 @@
             </div>
         </div>
 
-        <div id="windowNote" class="app-window hidden" style="width: 600px; height: 450px;">
+        <!-- APP: NOTEPAD -->
+        <div id="windowNote" class="app-window hidden" style="width: 600px; height: 400px; left: 180px; top: 160px;">
             <div class="win-title-bar" onmousedown="Arya.drag(event, 'windowNote')">
-                <div class="win-btns"><div class="btn-close" onclick="closeApp('windowNote')"></div></div>
+                <div class="win-btns">
+                    <div class="btn-close" onclick="closeApp('windowNote')"></div>
+                    <div class="btn-minimize" onclick="minimizeApp('windowNote')"></div>
+                </div>
                 <div class="win-name">NOTEPAD - SCRATCHPAD.TXT</div>
             </div>
-            <div class="win-toolbar">File · Edit · Format · View</div>
             <div class="win-main-area text-view">
                 <textarea id="notepadArea" placeholder="Raw buffer stream logs..."></textarea>
             </div>
         </div>
 
-        <div id="windowFiles" class="app-window hidden" style="width: 850px; height: 550px;">
+        <!-- APP: FILE EXPLORER -->
+        <div id="windowFiles" class="app-window hidden" style="width: 750px; height: 480px; left: 200px; top: 180px;">
             <div class="win-title-bar" onmousedown="Arya.drag(event, 'windowFiles')">
-                <div class="win-btns"><div class="btn-close" onclick="closeApp('windowFiles')"></div></div>
+                <div class="win-btns">
+                    <div class="btn-close" onclick="closeApp('windowFiles')"></div>
+                    <div class="btn-minimize" onclick="minimizeApp('windowFiles')"></div>
+                </div>
                 <div class="win-name">FILE EXPLORER - STORAGE DEVS</div>
             </div>
-            <div class="win-toolbar">Root System / Core / Media / Users</div>
             <div class="win-main-area explorer-layout">
                 <div class="explorer-sidebar">
-                    <div class="side-item active" onclick="Arya.loadDir('Root')">💽 System (C:)</div>
+                    <div class="side-item active" onclick="Arya.loadDir('Root')">𒒽 System (C:)</div>
                     <div class="side-item" onclick="Arya.loadDir('Documents')">📁 Documents</div>
                     <div class="side-item" onclick="Arya.loadDir('Media')">🖼️ Media Files</div>
                 </div>
@@ -143,9 +170,13 @@
             </div>
         </div>
 
-        <div id="windowBrowser" class="app-window hidden" style="width: 1000px; height: 700px;">
+        <!-- APP: WEB BROWSER -->
+        <div id="windowBrowser" class="app-window hidden" style="width: 900px; height: 580px; left: 220px; top: 200px;">
             <div class="win-title-bar" onmousedown="Arya.drag(event, 'windowBrowser')">
-                <div class="win-btns"><div class="btn-close" onclick="closeApp('windowBrowser')"></div></div>
+                <div class="win-btns">
+                    <div class="btn-close" onclick="closeApp('windowBrowser')"></div>
+                    <div class="btn-minimize" onclick="minimizeApp('windowBrowser')"></div>
+                </div>
                 <div class="win-name">ARYA QUANTUM BROWSER</div>
             </div>
             <div class="browser-address-bar">
@@ -155,58 +186,262 @@
             </div>
             <div class="win-main-area browser-frame-sim" id="browserFrame">
                 <div class="web-portal">
-                    <h1>Welcome to the Arya Sandbox Web</h1>
-                    <p>Simulated modern hyper-secure proxy web layout engine active.</p>
-                    <div class="web-bookmarks">
-                        <button onclick="document.getElementById('browserUrl').value='https://news.ycombinator.com'; Arya.navBrowser('go')">Hacker News</button>
-                        <button onclick="document.getElementById('browserUrl').value='https://wikipedia.org'; Arya.navBrowser('go')">Wikipedia</button>
+                    <h1>Welcome to Arya Sandbox Web</h1>
+                </div>
+            </div>
+        </div>
+
+        <!-- APP: QUANTUM CALC & HISTORY STRIP -->
+        <div id="windowCalc" class="app-window hidden" style="width: 460px; height: 600px; left: 340px; top: 90px;">
+            <div class="win-title-bar" onmousedown="Arya.drag(event, 'windowCalc')">
+                <div class="win-btns">
+                    <div class="btn-close" onclick="closeApp('windowCalc')"></div>
+                    <div class="btn-minimize" onclick="minimizeApp('windowCalc')"></div>
+                </div>
+                <div class="win-name">QUANTUM CALCULATOR LABS</div>
+            </div>
+            <div class="cyber-calc-frame">
+                <div class="calc-sidebar-stream">
+                    <div class="stream-title">LOG BUFFER</div>
+                    <div id="calcStreamHistory" class="stream-nodes">
+                        <div class="empty-stream-notice">No logs recorded</div>
+                    </div>
+                    <button class="clear-stream-btn" onclick="Arya.clearCalcStream()">WIPE LOGS</button>
+                </div>
+                
+                <div class="calc-main-interface">
+                    <div class="calc-screen-wrapper">
+                        <div id="calcFormula" class="calc-formula-display"></div>
+                        <input type="text" id="calcDisplay" class="calc-main-display" value="0" readonly>
+                    </div>
+                    <div class="calc-grid">
+                        <button class="calc-btn mode-btn" title="Clear Buffer" onclick="Arya.pressCalc('C')">AC</button>
+                        <button class="calc-btn mode-btn" title="Delete Last" onclick="Arya.pressCalc('back')">⌫</button>
+                        <button class="calc-btn mode-btn" title="Exponent" onclick="Arya.pressCalc('pow')">xʸ</button>
+                        <button class="calc-btn op-btn" onclick="Arya.pressCalc('/')">÷</button>
+                        
+                        <button class="calc-btn sci-btn" onclick="Arya.pressCalc('sin')">sin</button>
+                        <button class="calc-btn sci-btn" onclick="Arya.pressCalc('cos')">cos</button>
+                        <button class="calc-btn sci-btn" onclick="Arya.pressCalc('tan')">tan</button>
+                        <button class="calc-btn op-btn" onclick="Arya.pressCalc('*')">×</button>
+                        
+                        <button class="calc-btn num-btn" onclick="Arya.pressCalc('7')">7</button>
+                        <button class="calc-btn num-btn" onclick="Arya.pressCalc('8')">8</button>
+                        <button class="calc-btn num-btn" onclick="Arya.pressCalc('9')">9</button>
+                        <button class="calc-btn op-btn" onclick="Arya.pressCalc('-')">-</button>
+                        
+                        <button class="calc-btn num-btn" onclick="Arya.pressCalc('4')">4</button>
+                        <button class="calc-btn num-btn" onclick="Arya.pressCalc('5')">5</button>
+                        <button class="calc-btn num-btn" onclick="Arya.pressCalc('6')">6</button>
+                        <button class="calc-btn op-btn" onclick="Arya.pressCalc('+')">+</button>
+                        
+                        <button class="calc-btn num-btn" onclick="Arya.pressCalc('1')">1</button>
+                        <button class="calc-btn num-btn" onclick="Arya.pressCalc('2')">2</button>
+                        <button class="calc-btn num-btn" onclick="Arya.pressCalc('3')">3</button>
+                        <button class="calc-btn eq-btn" style="grid-row: span 2; height: 100%;" onclick="Arya.pressCalc('=')">=</button>
+                        
+                        <button class="calc-btn sci-btn" onclick="Arya.pressCalc('sqrt')">√</button>
+                        <button class="calc-btn num-btn" onclick="Arya.pressCalc('0')">0</button>
+                        <button class="calc-btn num-btn" onclick="Arya.pressCalc('.')">.</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="startMenu" class="start-overlay">
-            <div class="start-header">🧿 ARYA CORE INTERACTION LABS</div>
-            <div class="start-search-box">
-                <input type="text" placeholder="Search operational indices, manifests, utilities...">
+        <!-- APP: QUANTUM TEMPORAL CALENDAR NODE -->
+        <div id="windowCalendar" class="app-window hidden" style="width: 500px; height: 420px; left: 260px; top: 220px;">
+            <div class="win-title-bar" onmousedown="Arya.drag(event, 'windowCalendar')">
+                <div class="win-btns">
+                    <div class="btn-close" onclick="closeApp('windowCalendar')"></div>
+                    <div class="btn-minimize" onclick="minimizeApp('windowCalendar')"></div>
+                </div>
+                <div class="win-name">QUANTUM TEMPORAL CALENDAR</div>
             </div>
-            <div class="start-apps-headline">All Operational Modules</div>
-            <div class="start-apps">
-                <div class="app-tile" onclick="openApp('windowWrite')">📄<span>Arya Word</span></div>
-                <div class="app-tile" onclick="openApp('windowGrid')">📊<span>Arya Excel</span></div>
-                <div class="app-tile" onclick="openApp('windowPaint')">🎨<span>Paint Studio</span></div>
-                <div class="app-tile" onclick="openApp('windowPPT')">📉<span>PowerPoint</span></div>
-                <div class="app-tile" onclick="openApp('windowNote')">📝<span>Notepad</span></div>
-                <div class="app-tile" onclick="openApp('windowBrowser')">🌐<span>Quantum Web</span></div>
-                <div class="app-tile" onclick="openApp('windowFiles')">🗂️<span>File Explorer</span></div>
-                <div class="app-tile settings-dim">⚙️<span>Settings</span></div>
-                <div class="app-tile settings-dim">🖥️<span>Terminal</span></div>
-                <div class="app-tile settings-dim">🛍️<span>App Store</span></div>
-                <div class="app-tile settings-dim">🎵<span>Media Player</span></div>
-                <div class="app-tile settings-dim">🧮<span>Calculator</span></div>
+            <div class="calendar-workspace">
+                <div class="cal-main-engine">
+                    <div class="cal-nav-bar">
+                        <button onclick="Arya.changeCalMonth(-1)">◀</button>
+                        <span id="calMonthYearTitle">June 2026</span>
+                        <button onclick="Arya.changeCalMonth(1)">▶</button>
+                    </div>
+                    <div class="cal-days-header">
+                        <div>S</div><div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div>
+                    </div>
+                    <div id="calGridMatrix" class="cal-grid-matrix"></div>
+                </div>
+                <div class="cal-events-panel">
+                    <div class="cal-panel-title">EVENT LOGS</div>
+                    <div id="calSelectedDayLabel" class="cal-selected-lbl">Select a cycle</div>
+                    <div class="cal-input-wrapper">
+                        <input type="text" id="calEventInput" placeholder="New operational node...">
+                        <button onclick="Arya.addCalEvent()">ADD</button>
+                    </div>
+                    <div id="calEventsStream" class="cal-events-stream"></div>
+                </div>
             </div>
         </div>
 
-        <div class="dock-container">
-            <div class="dock-bar">
-                <div class="dock-btn start-trigger" onclick="toggleStart()">🧿</div>
-                <div class="dock-divider"></div>
-                
-                <div class="dock-search-wrap">
-                    <input type="text" id="dockSearch" placeholder="🔍 Search Arya OS..." onkeyup="Arya.handleDockSearch(event)">
+        <!-- APP: QUANTUM TO-DO TASK ENGINE -->
+        <div id="windowTasks" class="app-window hidden" style="width: 480px; height: 500px; left: 280px; top: 150px;">
+            <div class="win-title-bar" onmousedown="Arya.drag(event, 'windowTasks')">
+                <div class="win-btns">
+                    <div class="btn-close" onclick="closeApp('windowTasks')"></div>
+                    <div class="btn-minimize" onclick="minimizeApp('windowTasks')"></div>
                 </div>
-                
-                <div class="dock-divider"></div>
-                <div class="dock-btn" title="Quantum Web Browser" onclick="openApp('windowBrowser')">🌐</div>
-                <div class="dock-btn" title="File System" onclick="openApp('windowFiles')">🗂️</div>
-                <div class="dock-divider"></div>
-                <div class="dock-btn" title="Word Processor" onclick="openApp('windowWrite')">📄</div>
-                <div class="dock-btn" title="Spreadsheet Analytics" onclick="openApp('windowGrid')">📊</div>
-                <div class="dock-btn" title="Slide Engine" onclick="openApp('windowPPT')">📉</div>
-                <div class="dock-btn" title="Paint Canvas" onclick="openApp('windowPaint')">🎨</div>
-                <div class="dock-btn" title="Notepad Buffer" onclick="openApp('windowNote')">📝</div>
+                <div class="win-name">QUANTUM TASK CONFIGURATOR</div>
+            </div>
+            <div class="task-app-workspace">
+                <div class="task-control-panel">
+                    <div class="task-section-lbl">SCHEDULING HUB</div>
+                    <input type="text" id="taskHeadlineInput" placeholder="Task execution payload...">
+                    <div class="task-priority-selector">
+                        <label><input type="radio" name="taskPriority" value="high" checked> <span class="dot-prio high"></span> High</label>
+                        <label><input type="radio" name="taskPriority" value="medium"> <span class="dot-prio medium"></span> Med</label>
+                        <label><input type="radio" name="taskPriority" value="low"> <span class="dot-prio low"></span> Low</label>
+                    </div>
+                    <button class="task-add-btn" onclick="Arya.addTaskPayload()">DEPLOY TASK</button>
+                    <div style="flex: 1;"></div>
+                    <button class="task-wipe-btn" onclick="Arya.clearCompletedTasks()">WIPE COMPLETE</button>
+                </div>
+                <div class="task-stream-pane">
+                    <div class="task-section-lbl">ACTIVE TELEMETRY TASKS</div>
+                    <div id="taskActiveStream" class="task-active-stream"></div>
+                </div>
             </div>
         </div>
+
+        <!-- APP: CHRONOS CLOCK MATRIX LAB -->
+        <div id="windowClockApp" class="app-window hidden" style="width: 520px; height: 480px; left: 300px; top: 120px;">
+            <div class="win-title-bar" onmousedown="Arya.drag(event, 'windowClockApp')">
+                <div class="win-btns">
+                    <div class="btn-close" onclick="closeApp('windowClockApp')"></div>
+                    <div class="btn-minimize" onclick="minimizeApp('windowClockApp')"></div>
+                </div>
+                <div class="win-name">CHRONOS LABORATORY ENGINE</div>
+            </div>
+            <div class="clock-app-frame">
+                <div class="clock-tab-bar">
+                    <button class="clock-tab-btn active" id="tabBtnAlarm" onclick="Arya.switchClockTab('alarm')">🚨 ALARM</button>
+                    <button class="clock-tab-btn" id="tabBtnTimer" onclick="Arya.switchClockTab('timer')">⏳ TIMER</button>
+                    <button class="clock-tab-btn" id="tabBtnStopwatch" onclick="Arya.switchClockTab('stopwatch')">⏱️ STOPWATCH</button>
+                </div>
+                <div class="clock-content-area">
+                    <div id="clockSectionAlarm" class="clock-sub-pane">
+                        <div class="clock-pane-row">
+                            <input type="time" id="alarmTimeInput">
+                            <button class="clock-action-btn primary" onclick="Arya.setSystemAlarmNode()">ARM ALERT</button>
+                        </div>
+                        <div id="alarmActiveStatus" class="clock-status-banner">No alarms armed in memory</div>
+                        <div id="alarmTriggeredOverlay" class="alarm-trigger-banner hidden">
+                            <span>ALARM SEQUENCE BREACHED!</span>
+                            <button onclick="Arya.silenceActiveAlarm()">DISARM ALARM</button>
+                        </div>
+                    </div>
+                    <div id="clockSectionTimer" class="clock-sub-pane hidden">
+                        <div class="big-time-readout" id="timerDisplay">00:00</div>
+                        <div class="clock-pane-row">
+                            <input type="number" id="timerMinInput" placeholder="Min" min="0" max="99">
+                            <input type="number" id="timerSecInput" placeholder="Sec" min="0" max="59">
+                        </div>
+                        <div class="clock-pane-row" style="margin-top: 15px;">
+                            <button class="clock-action-btn success" id="timerStartBtn" onclick="Arya.toggleTimerEngine()">INITIALIZE</button>
+                            <button class="clock-action-btn danger" onclick="Arya.resetTimerEngine()">RESET</button>
+                        </div>
+                    </div>
+                    <div id="clockSectionStopwatch" class="clock-sub-pane hidden">
+                        <div class="big-time-readout" id="stopwatchDisplay">00:00.00</div>
+                        <div class="clock-pane-row">
+                            <button class="clock-action-btn success" id="stopwatchStartBtn" onclick="Arya.toggleStopwatchEngine()">RUN</button>
+                            <button class="clock-action-btn primary" onclick="Arya.logStopwatchLap()">LAP NODE</button>
+                            <button class="clock-action-btn danger" onclick="Arya.resetStopwatchEngine()">WIPE</button>
+                        </div>
+                        <div id="stopwatchLapsStream" class="stopwatch-laps-box"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- APP: PING PONG ARCADE ARENA -->
+        <div id="windowPingPong" class="app-window hidden" style="width: 700px; height: 500px; left: 240px; top: 140px;">
+            <div class="win-title-bar" onmousedown="Arya.drag(event, 'windowPingPong')">
+                <div class="win-btns">
+                    <div class="btn-close" onclick="closeApp('windowPingPong')"></div>
+                    <div class="btn-minimize" onclick="minimizeApp('windowPingPong')"></div>
+                </div>
+                <div class="win-name">ARYA PONG - COGNITIVE VECTOR ARENA</div>
+            </div>
+            <div class="pong-action-toolbar">
+                <div class="pong-score-deck">PLAYER: <span id="pongPlayerScore">0</span> | AI: <span id="pongCpuScore">0</span></div>
+                <button class="pong-reset-btn" onclick="Arya.resetPongGame()">RESET TRACK</button>
+            </div>
+            <div class="win-main-area pong-canvas-wrapper" id="pongCanvasContainer">
+                <canvas id="pongCanvas"></canvas>
+            </div>
+        </div>
+
+        <!-- APP: FLAPPY BIRD QUANTUM SKY -->
+        <div id="windowFlappy" class="app-window hidden" style="width: 500px; height: 600px; left: 360px; top: 60px;">
+            <div class="win-title-bar" onmousedown="Arya.drag(event, 'windowFlappy')">
+                <div class="win-btns">
+                    <div class="btn-close" onclick="closeApp('windowFlappy')"></div>
+                    <div class="btn-minimize" onclick="minimizeApp('windowFlappy')"></div>
+                </div>
+                <div class="win-name">ARYA FLAP - KINETIC GRAVITY FLIGHT</div>
+            </div>
+            <div class="flappy-action-toolbar">
+                <div class="flappy-score-deck">SCORE: <span id="flappyScore">0</span> | BEST: <span id="flappyBestScore">0</span></div>
+                <div class="flappy-hint-lbl">Click Arena or Press SPACE to jump</div>
+            </div>
+            <div class="win-main-area flappy-canvas-wrapper" id="flappyCanvasContainer" onclick="Arya.triggerFlappyImpulse()">
+                <canvas id="flappyCanvas"></canvas>
+                <div id="flappyGameOverBox" class="flappy-overlay-message hidden">
+                    <h3>SYSTEM CRASH</h3>
+                    <p>FLIGHT NODE BOUNDS TERMINATED</p>
+                    <button onclick="Arya.restartFlappyCore(event)">REBOOT NODE</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MASTER APPLICATION SYSTEM: THE START MENU LAUNCHER -->
+        <div id="startMenu" class="start-overlay">
+            <div class="start-header">🧿 ARYA OPERATIONAL INTERACTION INDEX</div>
+            <div class="start-search-box">
+                <input type="text" id="startMenuSearch" placeholder="Search applications..." onkeyup="Arya.handleStartSearch(event)">
+            </div>
+            <div class="start-apps-headline">Core Application Modules</div>
+            <div class="start-apps">
+                <div class="app-tile" onclick="openApp('windowBrowser')">🌐<span>Quantum Web</span></div>
+                <div class="app-tile" onclick="openApp('windowFiles')">🗂️<span>File Explorer</span></div>
+                <div class="app-tile" onclick="openApp('windowWrite')">📄<span>Arya Word</span></div>
+                <div class="app-tile" onclick="openApp('windowGrid')">📊<span>Arya Excel</span></div>
+                <div class="app-tile" onclick="openApp('windowPPT')">📉<span>PowerPoint</span></div>
+                <div class="app-tile" onclick="openApp('windowPaint')">🎨<span>Paint Studio</span></div>
+                <div class="app-tile" onclick="openApp('windowNote')">📝<span>Notepad Buffer</span></div>
+                <div class="app-tile" onclick="openApp('windowCalc')">🧮<span>Matrix Calc</span></div>
+                <div class="app-tile" onclick="openApp('windowCalendar')">📅<span>Calendar Node</span></div>
+                <div class="app-tile" onclick="openApp('windowTasks')">📋<span>Task Engine</span></div>
+                <div class="app-tile" onclick="openApp('windowClockApp')">⏱️<span>Chronos Clock</span></div>
+                <div class="app-tile" onclick="openApp('windowPingPong')">🏓<span>Arya Pong</span></div>
+                <div class="app-tile" onclick="openApp('windowFlappy')">🐦<span>Flappy Bird</span></div>
+            </div>
+        </div>
+
+        <!-- ARYA CORE HUD DOCK -->
+        <div class="hud-dock-system">
+            <div class="hud-anchor-core" title="System Matrix Menu" onclick="toggleStart()">
+                <div class="hud-core-pulse"></div>
+                <span class="hud-core-symbol">🧿</span>
+            </div>
+            
+            <div class="hud-search-track">
+                <input type="text" id="hudRailSearch" placeholder="🔍 Search Matrix..." onkeyup="Arya.handleHudSearch(event)">
+            </div>
+            
+            <div class="hud-rail-track" id="dynamicDockItems">
+                <!-- Dynamic active elements populate inside the telemetry stream rail -->
+            </div>
+        </div>
+
     </div>
 
     <script src="script.js"></script>
