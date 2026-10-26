@@ -48,21 +48,62 @@
     <!-- MAIN OPERATING ENVIRONMENT -->
     <div id="desktop" class="system-layer desktop-layer hidden">
         
-        <!-- SYSTEM TASKBAR -->
+        <!-- MENU BAR + SYSTEM TRAY -->
         <div class="top-bar">
-            <div class="top-left" onclick="toggleStart()">ARYA OS</div>
-            <div class="top-center">
-                <div id="systemClock">00:00:00</div>
-                <div id="systemDate" class="full-date">Calculating...</div>
+            <div class="menubar-left">
+                <div class="mb-btn mb-logo" onclick="Arya.togglePop('arMenu', this, event)" title="Arya OS">🧿</div>
+                <div class="mb-btn mb-app" id="activeAppName" onclick="Arya.buildAppMenu(); Arya.togglePop('appMenu', this, event)">Desktop</div>
             </div>
-            <div class="top-right">
-                <span id="chargeIcon"></span>
-                <span id="batPercentage">--%</span>
-                <div class="battery-outer">
-                    <div id="batteryInner"></div>
+            <div class="menubar-right">
+                <div class="mb-btn" id="trayWifi" onclick="Arya.togglePop('controlCenter', this, event)" title="Wi-Fi">
+                    <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 8.8a15 15 0 0 1 20 0"/><path d="M5.5 12.5a10 10 0 0 1 13 0"/><path d="M9 16a5 5 0 0 1 6 0"/><circle cx="12" cy="19.5" r="1" fill="currentColor"/><path class="wifi-slash" d="M3 3l18 18"/></svg>
+                </div>
+                <div class="mb-btn hidden" id="trayDnd" title="Do Not Disturb">🌙</div>
+                <div class="mb-btn tray-battery" onclick="Arya.togglePop('controlCenter', this, event)">
+                    <span id="chargeIcon"></span>
+                    <span id="batPercentage">--%</span>
+                    <div class="battery-outer"><div id="batteryInner"></div></div>
+                </div>
+                <div class="mb-btn" id="trayCC" onclick="Arya.togglePop('controlCenter', this, event)" title="Control Center">
+                    <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><rect x="2.5" y="4" width="19" height="6.5" rx="3.25"/><circle cx="7" cy="7.25" r="1.6" fill="currentColor"/><rect x="2.5" y="13.5" width="19" height="6.5" rx="3.25"/><circle cx="17" cy="16.75" r="1.6" fill="currentColor"/></svg>
+                </div>
+                <div class="mb-btn tray-clock" onclick="openApp('windowCalendar')" title="Open Calendar">
+                    <span id="systemDate" class="full-date">--</span>
+                    <span id="systemClock">00:00</span>
                 </div>
             </div>
         </div>
+
+        <!-- MENU DROPDOWNS -->
+        <div id="arMenu" class="pop pop-left">
+            <div class="pop-item" onclick="Arya.closePopovers(); Arya.notify('Arya OS', 'Version 1.0.0 · Quantum Core', '🧿')">About Arya OS</div>
+            <div class="pop-sep"></div>
+            <div class="pop-item" onclick="Arya.closePopovers(); toggleStart()">App Launcher…</div>
+            <div class="pop-sep"></div>
+            <div class="pop-item" onclick="Arya.lockScreen()">Lock Screen</div>
+            <div class="pop-item danger" onclick="location.reload()">Restart…</div>
+        </div>
+        <div id="appMenu" class="pop pop-left"></div>
+
+        <!-- CONTROL CENTER -->
+        <div id="controlCenter" class="pop cc-panel">
+            <div class="cc-grid">
+                <div class="cc-block cc-conn">
+                    <div class="cc-row on" id="ccWifi" onclick="Arya.toggleNet('wifi')"><div class="cc-ic">📶</div><div class="cc-txt"><b>Wi-Fi</b><small id="ccWifiSub">Arya-Net</small></div></div>
+                    <div class="cc-row on" id="ccBt" onclick="Arya.toggleNet('bt')"><div class="cc-ic">🔵</div><div class="cc-txt"><b>Bluetooth</b><small id="ccBtSub">On</small></div></div>
+                    <div class="cc-row" id="ccDnd" onclick="Arya.toggleNet('dnd')"><div class="cc-ic">🌙</div><div class="cc-txt"><b>Do Not Disturb</b><small id="ccDndSub">Off</small></div></div>
+                </div>
+                <div class="cc-side">
+                    <div class="cc-block cc-battery"><small>Battery</small><div class="cc-big" id="ccBat">--%</div><small id="ccBatState">Checking…</small></div>
+                    <div class="cc-block cc-tile" onclick="Arya.closePopovers(); openApp('windowCalendar')"><span>📅</span><small>Calendar</small></div>
+                </div>
+            </div>
+            <div class="cc-block cc-slider"><div class="cc-lbl">Display</div><div class="cc-range-wrap"><span>☀️</span><input type="range" class="cc-range" id="ccBright" min="40" max="100" value="100" oninput="Arya.setBrightness(this.value)"></div></div>
+            <div class="cc-block cc-slider"><div class="cc-lbl">Sound</div><div class="cc-range-wrap"><span>🔈</span><input type="range" class="cc-range" id="ccVol" min="0" max="100" value="80" oninput="Arya.setVolume(this.value)"></div></div>
+        </div>
+
+        <div id="notifStack" class="notif-stack"></div>
+        <div id="dimLayer"></div>
 
         <!-- APP: ARYA WORD -->
         <div id="windowWrite" class="app-window hidden" style="width: 850px; height: 600px; left: 100px; top: 80px;">
@@ -71,11 +112,11 @@
                     <div class="btn-close" onclick="closeApp('windowWrite')"></div>
                     <div class="btn-minimize" onclick="minimizeApp('windowWrite')"></div>
                 </div>
-                <div class="win-name">ARYA WORD - SPECIFICATION.DOCX</div>
+                <div class="win-name">Nova Word - SPECIFICATION.DOCX</div>
             </div>
             <div class="win-toolbar">File · Edit · Insert · Layout</div>
             <div class="win-main-area paper-view">
-                <div class="a4-page" contenteditable="true">Start writing with Arya Word processor...</div>
+                <div class="a4-page" contenteditable="true">Start writing with Nova Word processor...</div>
             </div>
         </div>
 
@@ -86,7 +127,7 @@
                     <div class="btn-close" onclick="closeApp('windowGrid')"></div>
                     <div class="btn-minimize" onclick="minimizeApp('windowGrid')"></div>
                 </div>
-                <div class="win-name">ARYA EXCEL - METRICS.XLSX</div>
+                <div class="win-name">Nova Sheets - METRICS.XLSX</div>
             </div>
             <div class="win-toolbar">File · Data · Formulas · Table</div>
             <div class="win-main-area grid-view">
@@ -101,7 +142,7 @@
                     <div class="btn-close" onclick="closeApp('windowPaint')"></div>
                     <div class="btn-minimize" onclick="minimizeApp('windowPaint')"></div>
                 </div>
-                <div class="win-name">ARYA PAINT - DIGITAL ENGINE</div>
+                <div class="win-name">Sketch - DIGITAL ENGINE</div>
             </div>
             <div class="paint-controls">
                 <div class="tool-item">Brush: <input type="color" id="brushColor" value="#2979ff"></div>
@@ -120,7 +161,7 @@
                     <div class="btn-close" onclick="closeApp('windowPPT')"></div>
                     <div class="btn-minimize" onclick="minimizeApp('windowPPT')"></div>
                 </div>
-                <div class="win-name">ARYA POWERPOINT - PRESENTATION.PPTX</div>
+                <div class="win-name">Nova Slide - PRESENTATION.PPTX</div>
             </div>
             <div class="win-toolbar">Design · Animations · Slide Show</div>
             <div class="win-main-area ppt-workspace">
@@ -198,7 +239,7 @@
                     <div class="btn-close" onclick="closeApp('windowCalc')"></div>
                     <div class="btn-minimize" onclick="minimizeApp('windowCalc')"></div>
                 </div>
-                <div class="win-name">QUANTUM CALCULATOR LABS</div>
+                <div class="win-name">CALCULATOR LABS</div>
             </div>
             <div class="cyber-calc-frame">
                 <div class="calc-sidebar-stream">
@@ -368,7 +409,7 @@
                     <div class="btn-close" onclick="closeApp('windowPingPong')"></div>
                     <div class="btn-minimize" onclick="minimizeApp('windowPingPong')"></div>
                 </div>
-                <div class="win-name">ARYA PONG - COGNITIVE VECTOR ARENA</div>
+                <div class="win-name">NOVA PONG - COGNITIVE VECTOR ARENA</div>
             </div>
             <div class="pong-action-toolbar">
                 <div class="pong-score-deck">PLAYER: <span id="pongPlayerScore">0</span> | AI: <span id="pongCpuScore">0</span></div>
@@ -386,7 +427,7 @@
                     <div class="btn-close" onclick="closeApp('windowFlappy')"></div>
                     <div class="btn-minimize" onclick="minimizeApp('windowFlappy')"></div>
                 </div>
-                <div class="win-name">ARYA FLAP - KINETIC GRAVITY FLIGHT</div>
+                <div class="win-name">Flappy Bird - KINETIC GRAVITY FLIGHT</div>
             </div>
             <div class="flappy-action-toolbar">
                 <div class="flappy-score-deck">SCORE: <span id="flappyScore">0</span> | BEST: <span id="flappyBestScore">0</span></div>
@@ -402,6 +443,70 @@
             </div>
         </div>
 
+        <!-- APP: TERMINAL -->
+        <div id="windowTerminal" class="app-window hidden" style="width: 650px; height: 450px; left: 220px; top: 160px;">
+            <div class="win-title-bar" onmousedown="Arya.drag(event, 'windowTerminal')">
+                <div class="win-btns">
+                    <div class="btn-close" onclick="closeApp('windowTerminal')"></div>
+                    <div class="btn-minimize" onclick="minimizeApp('windowTerminal')"></div>
+                </div>
+                <div class="win-name">ARYA TERMINAL - ROOT</div>
+            </div>
+            <div class="win-main-area text-view">
+                <textarea id="terminalArea" readonly style="color: var(--cyber-green);">Arya OS v1.0.0 Root Terminal Initialization...
+Booting Matrix Framework... [OK]
+Loading Cyber-Nodes... [OK]
+Establishing Quantum Core Protocol... [OK]
+root@arya:~# _</textarea>
+            </div>
+        </div>
+
+        <!-- APP: SNAKE GAME -->
+        <div id="windowSnake" class="app-window hidden" style="width: 500px; height: 500px; left: 400px; top: 100px;">
+            <div class="win-title-bar" onmousedown="Arya.drag(event, 'windowSnake')">
+                <div class="win-btns">
+                    <div class="btn-close" onclick="closeApp('windowSnake')"></div>
+                    <div class="btn-minimize" onclick="minimizeApp('windowSnake')"></div>
+                </div>
+                <div class="win-name">NOVA SNAKE - KINETIC REPTILE</div>
+            </div>
+            <div class="snake-action-toolbar">
+                <div class="snake-score-deck">SCORE: <span id="snakeScore">0</span> | BEST: <span id="snakeBest">0</span></div>
+                <div class="snake-hint-lbl">Arrows / WASD to move | SPACE to pause</div>
+            </div>
+            <div class="win-main-area snake-canvas-wrapper">
+                <canvas id="snakeCanvas"></canvas>
+                <div id="snakeOverlay" class="snake-overlay">
+                    <h3 id="snakeOvTitle">NOVA SNAKE</h3>
+                    <p id="snakeOvText">Press an arrow key or WASD to start</p>
+                    <button id="snakeOvBtn" onclick="Arya.snakeAction(event)">START</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- APP: SPACE INVADERS -->
+        <div id="windowSpaceInvaders" class="app-window hidden" style="width: 640px; height: 620px; left: 320px; top: 80px;">
+            <div class="win-title-bar" onmousedown="Arya.drag(event, 'windowSpaceInvaders')">
+                <div class="win-btns">
+                    <div class="btn-close" onclick="closeApp('windowSpaceInvaders')"></div>
+                    <div class="btn-minimize" onclick="minimizeApp('windowSpaceInvaders')"></div>
+                </div>
+                <div class="win-name">SPACE INVADERS - RETRO CORE</div>
+            </div>
+            <div class="si-action-toolbar">
+                <div class="si-score-deck">SCORE: <span id="siScore">0</span></div>
+                <div class="si-hint-lbl">Arrows to Move | SPACE to Fire</div>
+            </div>
+            <div class="win-main-area si-canvas-wrapper" id="siCanvasContainer">
+                <canvas id="spaceInvadersCanvas"></canvas>
+                <div id="siGameOverBox" class="si-overlay-message hidden">
+                    <h3>EARTH DESTROYED</h3>
+                    <p>ALIEN BREACH SUCCESSFUL</p>
+                    <button onclick="Arya.restartSpaceInvaders(event)">REDEPLOY SHIP</button>
+                </div>
+            </div>
+        </div>
+
         <!-- MASTER APPLICATION SYSTEM: THE START MENU LAUNCHER -->
         <div id="startMenu" class="start-overlay">
             <div class="start-header">🧿 ARYA OPERATIONAL INTERACTION INDEX</div>
@@ -412,17 +517,20 @@
             <div class="start-apps">
                 <div class="app-tile" onclick="openApp('windowBrowser')">🌐<span>Quantum Web</span></div>
                 <div class="app-tile" onclick="openApp('windowFiles')">🗂️<span>File Explorer</span></div>
-                <div class="app-tile" onclick="openApp('windowWrite')">📄<span>Arya Word</span></div>
-                <div class="app-tile" onclick="openApp('windowGrid')">📊<span>Arya Excel</span></div>
-                <div class="app-tile" onclick="openApp('windowPPT')">📉<span>PowerPoint</span></div>
-                <div class="app-tile" onclick="openApp('windowPaint')">🎨<span>Paint Studio</span></div>
-                <div class="app-tile" onclick="openApp('windowNote')">📝<span>Notepad Buffer</span></div>
-                <div class="app-tile" onclick="openApp('windowCalc')">🧮<span>Matrix Calc</span></div>
-                <div class="app-tile" onclick="openApp('windowCalendar')">📅<span>Calendar Node</span></div>
+                <div class="app-tile" onclick="openApp('windowWrite')">📄<span>Nova Word</span></div>
+                <div class="app-tile" onclick="openApp('windowGrid')">📊<span>Nova Sheets</span></div>
+                <div class="app-tile" onclick="openApp('windowPPT')">📉<span>Nova Slide</span></div>
+                <div class="app-tile" onclick="openApp('windowPaint')">🎨<span>Sketch</span></div>
+                <div class="app-tile" onclick="openApp('windowNote')">📝<span>Notepad Beta</span></div>
+                <div class="app-tile" onclick="openApp('windowCalc')">🧮<span>MCalc</span></div>
+                <div class="app-tile" onclick="openApp('windowCalendar')">📅<span>Calendar </span></div>
                 <div class="app-tile" onclick="openApp('windowTasks')">📋<span>Task Engine</span></div>
                 <div class="app-tile" onclick="openApp('windowClockApp')">⏱️<span>Chronos Clock</span></div>
-                <div class="app-tile" onclick="openApp('windowPingPong')">🏓<span>Arya Pong</span></div>
+                <div class="app-tile" onclick="openApp('windowPingPong')">🏓<span>Nova Pong</span></div>
                 <div class="app-tile" onclick="openApp('windowFlappy')">🐦<span>Flappy Bird</span></div>
+                <div class="app-tile" onclick="openApp('windowTerminal')">💻<span>Terminal</span></div>
+                <div class="app-tile" onclick="openApp('windowSnake')">🐍<span>Nova Snake</span></div>
+                <div class="app-tile" onclick="openApp('windowSpaceInvaders')">👾<span>Space Invader</span></div>
             </div>
         </div>
 
